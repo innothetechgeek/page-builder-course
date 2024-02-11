@@ -5,6 +5,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\SectionsController;
+use App\Http\Controllers\PageController;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,14 +42,14 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::get('page-manager', function(){
-
-    return Inertia::render('PageManager');
-
-});
+Route::get('page-manager', [PageController::class,'index']);
 
 Route::get('page/liveedit/{section_id}',[SectionsController::class,'liveEdit']);
 
 Route::post('sections/uploadsliderimage',[SectionsController::class,'uploadSliderImages'])->name('upload-slider-images');
+
+Route::get('page/sections/{page_id}',[SectionsController::class,'getPageSections']);
+
+Route::post('section/save',[SectionsController::class, 'saveSection'])->name('section.save');
 
 require __DIR__.'/auth.php';

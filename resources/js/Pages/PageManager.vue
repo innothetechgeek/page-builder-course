@@ -2,48 +2,70 @@
     import AdminLayout from '@/Layouts/AdminLayout.vue';
     import SectionManager from '@/Components/Admin/SectionManager.vue';
 
+    import {reactive} from 'vue';
+
     export default {
         components:{
             AdminLayout, 
             SectionManager,
         },
+ 
+        mounted(){
 
+            this.getPageSections();
+
+        },
+        
         methods: {
 
             getPageSections(){
-                alert("I'm about to get page sections");
+
+                //alert("I'm about to get page sections");
+
+                axios.get('page/sections/'+this.activePage).then(response => {
+
+                    this.pageSections = response.data;
+
+                })
             }
 
         },
+        props:{
+            pages: Object,
+        },
+
         data(){
-            return {
-                pageSections: [
-                    {
-                        id: 1,
-                        title: 'Slider',
-                        contentType: 'slides',
-                        content: '',
-                    },
-                    {
-                        id: 2,
-                        title: 'Courses',
-                        contentType: 'dynamic',
-                        content: 'we \' replace this with the actual courses',
-                    },
-                    {
-                        id: 3,
-                        title: 'Learn to cook',
-                        contentType: 'static',
-                        content: '',
-                    }
-                    ,  {
-                        id: 4,
-                        title: 'Why Choose Us',
-                        contentType: 'static',
-                        content: 'some content',
-                    }
-                ]
-            }
+            return reactive({
+                 pageSections: [],
+                 activePage: 1,
+
+                // pageSections: [
+                //     {
+                //         id: 1,
+                //         title: 'Slider',
+                //         contentType: 'slides',
+                //         content: '',
+                //     },
+                //     {
+                //         id: 2,
+                //         title: 'Courses',
+                //         contentType: 'dynamic',
+                //         content: 'we \' replace this with the actual courses',
+                //     },
+                //     {
+                //         id: 3,
+                //         title: 'Learn to cook',
+                //         contentType: 'static',
+                //         content: '',
+                //     }
+                //     ,  {
+                //         id: 4,
+                //         title: 'Why Choose Us',
+                //         contentType: 'static',
+                //         content: 'some content',
+                //     }
+                // ]
+            })
         }
         
     }
@@ -53,6 +75,7 @@
     
     <AdminLayout>
        <div class="content-wrapper">
+
             <div class="content">
                 <div class="container-fluid">
                     <div class="row table-agile-info">
@@ -73,10 +96,8 @@
                                             <div class="form-group p-card-body">
                                                 
                                                 <label> Select </label>
-                                                <select @change="getPageSections()" class="form-control">
-                                                    <option>Home</option>
-                                                    <option>About us</option>
-                                                    <option>Contact us</option>
+                                                <select @change="getPageSections()" class="form-control" v-model="activePage">
+                                                    <option :value="page.id" v-for="(page,index) in pages" :key="page.id">{{ page.name }}</option>
                                                 </select>
 
                                             </div>

@@ -11,7 +11,8 @@ export default{
       isPanelActive: false,
     }
   },
-
+  
+  
   methods: {
     togglePanel(){
       this.isPanelActive = !this.isPanelActive;
@@ -30,15 +31,15 @@ export default{
 </script>
 <template>
     <div @click="togglePanel()" class="accordion section-title">
-         {{  section.title }}
+         {{  section.name }}
         <font-awesome-icon icon="fa-plus"></font-awesome-icon>  
     </div>
     <div class="panel" :class="{active:isPanelActive}">
         <div class="panel-content">
           
-          <SlidesManager v-if="section.contentType=='slides'" ></SlidesManager>
+          <SlidesManager v-if="section.content_type=='slider'" ></SlidesManager>
 
-          <StaticSectionManager v-if="section.contentType=='static'" :section="section" />
+          <StaticSectionManager v-if="section.content_type=='static content'" :section="section" />
 
         </div>
 

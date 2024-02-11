@@ -13,14 +13,22 @@ import '../../css/editor/editor-styles.css';
 
 export default{
   
-    props: {content: String,blocks: Array},
+    props: {content: String,blocks: Array, section_id: Number},
+
+    data(){
+
+        return{
+            editor: null,
+        }
+    },
 
     methods:{
 
         initializeGrapeJsEditor(){
 
-
-            grapesjs.init({
+            alert( this.content);
+            
+            this.editor =  grapesjs.init({
                 container: '#editor',
                 components:  this.content,
                 blockManager: {
@@ -46,6 +54,35 @@ export default{
 
 
 
+        },
+
+        addSaveButton(){
+
+            this.editor.Panels.addButton('options',{
+
+                id: 'save',
+                className: 'fas fa-save',
+                command: this.saveChanges,
+                attributes: {title: 'Save Page'}
+            })
+
+        },
+
+        saveChanges(){
+
+            //alert('this is the save page method');
+            let html = this.editor.getHtml();
+            let css = this.editor.getCss();
+
+            axios.post(route('section.save'),{
+
+                sectionId: this.section_id,
+                html: html,
+                css: css,
+
+            });
+  
+
         }
         
       
@@ -55,6 +92,7 @@ export default{
 
         this.initializeGrapeJsEditor();
         this.applyStyles();
+        this.addSaveButton();
     
     
     }

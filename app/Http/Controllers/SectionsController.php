@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+use App\Models\PageSection;
+
 class SectionsController extends Controller
 {
     //
@@ -423,14 +425,35 @@ class SectionsController extends Controller
 
     public function liveEdit($section_id){
 
-        $content = '<p>This is dummy content for now, we\'ll be getting the actual content from 
-                the database and we will be able to edit the content through the live editor</p>';
+        $section =  PageSection::find($section_id);
+
+        $content = $section->content;
+
+       // dd(  $content );
 
         $blocks = $this->reusableBlocks;
 
-       return Inertia::render('LiveEditor',['content' => $content,'blocks'=>$blocks]);
+        return Inertia::render('LiveEditor',['content' => $content,'blocks'=>$blocks,'section_id'=>$section_id]);
 
 
+
+    }
+
+    public function getPageSections($page_id){
+
+        return PageSection::where('page_id',$page_id)->get();
+
+    }
+
+    public function saveSection(Request $request){
+
+        $section = PageSection::find($request->sectionId);
+        $section->content = $request->html;
+        $section->css = $request->css;
+
+        $section->save();
+
+        return 'success !!';
 
     }
 
