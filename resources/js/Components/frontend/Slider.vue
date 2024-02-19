@@ -48,6 +48,8 @@
 
 </script>
 
+
+
 <style scoped>
     .carousel_item{
 
