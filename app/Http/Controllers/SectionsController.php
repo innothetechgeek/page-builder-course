@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 use App\Models\PageSection;
+use App\Models\Slide;
 
 class SectionsController extends Controller
 {
@@ -409,13 +410,23 @@ class SectionsController extends Controller
 
     public function uploadSliderImages(Request $request){
 
+
         $files = $request->allFiles();
 
         foreach ($files as $file) {
 
             $file_name = $file->getClientOriginalName();
 
-            $path = $file->storeAs("slides",$file_name);
+            $path = $file->storeAs("/public/slides",$file_name);
+
+            $slide = new Slide;
+            $slide->title = 'test';
+            $slide->description = 'test';
+            $slide->image =   $file_name ;
+            $slide->slider_id = 1;
+            $slide->section_id = 1;
+            $slide->save();
+
             
         }
        

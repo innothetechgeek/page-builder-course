@@ -17,4 +17,23 @@ class PageController extends Controller
 
         return Inertia::render('PageManager', ['pages'=>$pages]);
     }
+
+
+    public function resolovePages(Request $request){
+
+        $pages = Page::all();
+
+        $request_path = $request->path();
+
+        $page = Page::with('sections.slides')->where('url',$request_path)->get();
+
+        $page_sections = $page[0]->sections;
+        
+        return Inertia::render('PageResolver',['menu_items'=> $pages,'page_sections'=>   $page_sections]);
+
+
+
+    }
+
+
 }
